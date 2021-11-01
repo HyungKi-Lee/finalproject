@@ -1,0 +1,28 @@
+package xyz.itwill.service;
+
+import java.util.List;
+import java.util.Map;
+
+import xyz.itwill.dto.Qna;
+import xyz.itwill.util.Criteria;
+
+public interface QnaService {
+	public List<Qna> qlist(Criteria cri) throws Exception; 
+	public Qna qread(int qno) throws Exception;
+	public void qwrite(Qna qna) throws Exception;
+	public void qupdate(Qna qna) throws Exception;
+	public void qdelete(int qno) throws Exception;
+	public int qlistCount() throws Exception;
+	/////////////////////마이페이지/////////////////////
+	List<Qna> getQnaListById(String id); //나의 문의목록
+	int getMyQnaCount(String id); //나의 문의건수
+	List<Qna> getMyQnaList(Map<String, Object> map); //나의 문의목록
+
+	/////////////////////관리자 페이지/////////////////////
+	//오늘문의
+	int getTodayQnaCount();
+	List<Qna> getTodayQnaList();
+	//검색기능 
+	int getSearchQnaCount(Map<String, Object> map);
+	List<Qna> getSearchQnaList(Map<String, Object> map);
+}

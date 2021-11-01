@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.ReviewMapper">
+
+	<!-- 이용후기 목록(페이징) -->
+	<select id="listPage" resultType="Review"
+		parameterType="xyz.itwill.util.SearchCriteria">
+		select rno, rwriter, rtitle, rcontent, rdate, rcount from
+		(select rno,
+		rwriter,
+		rtitle, rcontent, rdate, rcount, row_number() over(order
+		by rno
+		desc) as
+		rnum
+		from review where 1=1
+		<if test="searchType != null">
+			<if test="searchType == 'rtitle'.toString()">and rtitle like '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'rwriter'.toString()">and rwriter like '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'rtitlecontent'.toString()">and (rtitle like '%' || #{keyword} || '%') or (rcontent
+				like '%' || #{keyword} || '%')</if>
+		</if>
+		)
+		where rnum between #{rowStart} and
+		#{rowEnd} order by rno
+		desc
+	</select>
+
+	<!-- 이용후기 전체 갯수 -->
+	<select id="listCount" resultType="int"
+		parameterType="xyz.itwill.util.SearchCriteria">
+		select count(rno) from review
+		where 1=1
+		<if test="searchType != null">
+			<if test="searchType == 'rtitle'.toString()">and rtitle like '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'rwriter'.toString()">and rwriter like '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'rtitlecontent'.toString()">and (rtitle like '%' || #{keyword} || '%') or (rcontent
+				like '%' || #{keyword} || '%')</if>
+		</if>
+		and rno > 0
+	</select>
+
+
+
+
+	<!-- 이용후기 조회수 증가 -->
+	<update id="rHit" parameterType="int">
+		update review set
+		rcount = rcount+1
+		where rno = #{rno}
+	</update>
+
+
+	<!-- 이용후기 상세 -->
+	<select id="read" parameterType="int" resultType="Review">
+		select rno,
+		rwriter,id, rtitle, rcontent, rimg from review where rno = #{rno}
+	</select>
+
+
+	<!-- 이용후기 삽입 -->
+	<insert id="insert">
+		insert into review(rno, id, rtitle, rcontent, rwriter ,rimg,
+		rdate)
+		values(review_seq.nextval, #{id}, #{rtitle}, #{rcontent}, #{rwriter},#{rimg},
+		sysdate)
+	</insert>
+	
+
+	<!-- 이용후기 변경 -->
+	<update id="update" parameterType="Review">
+		update review set rwriter =
+		#{rwriter}, rtitle = #{rtitle}, rcontent = #{rcontent} where rno =
+		#{rno}
+	</update>
+
+
+	<!-- 이용후기 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from review where rno =
+		#{rno}
+	</delete>
+
+
+
+	<!-- ***************************관리자 페이지*************************** -->
+
+
+	<select resultType="Review" id="selectReviewListById">select * from review where
+		id=#{id} </select>
+
+	<!-- 나의 리뷰 수 검색 -->
+
+
+	<select resultType="int" id="selectMyReviewCount">select count(*) from review where
+		id=#{id} </select>
+
+	<!-- 나의 리뷰 목록 검색 -->
+
+
+	<select resultType="Review" id="selectMyReviewList">select * from (select rownum rn,
+		temp.* from (select * from review where id=#{id} order by rno desc)
+		temp)where rn between #{start} and #{end} </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

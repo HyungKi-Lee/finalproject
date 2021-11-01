@@ -1,0 +1,142 @@
+*,
+*:after,
+*:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.clearfix:before,
+.clearfix:after {
+	content: " ";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+a {
+  color: #ccc;
+  text-decoration: none;
+  outline: none;
+}
+
+/*Fun begins*/
+.tab1, .tab2, .tab3{border-right:0;}
+.tab_container {
+	width: 90%;
+	margin: 0 auto;
+	padding-top: 70px;
+	position: relative;
+}
+
+input, section.tab-content {
+  clear: both;
+  padding-top: 10px;
+  display: none;
+}
+
+label {
+  font-weight: 700;
+  font-size: 18px;
+  display: block;
+  float: left;
+  width: 30%;
+  padding: 1.5em;
+  color: #757575;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  background: #f2f2f2;
+  border: 1px solid #c5c5c5;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+  display: block;
+  padding: 20px;
+  background: #fbf9f9;
+  color: #999;
+}
+
+.tab_container .tab-content p,
+.tab_container .tab-content h3 {
+  -webkit-animation: fadeInScale 0.7s ease-in-out;
+  -moz-animation: fadeInScale 0.7s ease-in-out;
+  animation: fadeInScale 0.7s ease-in-out;
+}
+.tab_container .tab-content h3  {
+  text-align: center;
+}
+
+.tab_container [id^="tab"]:checked + label {
+  background: #fff;
+  border: 1px solid #90703c;
+  color: #90703c;
+}
+
+.tab_container [id^="tab"]:checked + label .fa {
+  color: #0CE;
+}
+
+label .fa {
+  font-size: 1.3em;
+  margin: 0 0.4em 0 0;
+}
+
+/* 여기부터 추가 --------------------- */
+.terms{
+	display:none !important;
+}
+
+.terms.active{
+	display:inline !important;
+}
+/* 여기까지 추가 --------------------- */
+
+.height1140{
+	height:1140px;
+}
+
+/*Media query*/
+@media only screen and (max-width: 930px) {
+  label span {
+    font-size: 14px;
+  }
+  label .fa {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  label span {
+    display: block;
+  }
+
+  label {
+    font-size: 10px;
+	padding: 1.5em 0.8em;
+  }
+
+  .tab_container {
+    width: 98%;
+  }
+  
+  .tab-content{
+	  padding:2px 0px !important;
+  }
+  
+  .height1140{
+	height:400px;
+	}
+	.content-email-txt{
+		position:inherit;
+	}
+  
+}
+.tab_container{
+width: 100%; max-width: 1290px; margin: 0 auto;
+}

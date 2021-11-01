@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 댓글 조회 -->
+<mapper namespace="xyz.itwill.mapper.QreplyMapper">
+
+<select id="qreplyList" parameterType="int" resultType="Qreply">
+	select
+		qrno, qno, qrwriter, qrcontent, qrdate
+		from qreply
+		where qno = #{qno} order by qrno desc 		
+</select>
+
+<!-- 댓글 작성 -->
+<insert id="qreplyWrite" parameterType="Qreply">
+	insert into qreply(qno,qrno, qrwriter, qrcontent, qrdate)
+		values(#{qno},qreply_seq.nextval, #{qrwriter}, #{qrcontent}, sysdate)
+</insert>
+	
+<!-- 댓글 수정 -->
+<update id="qreplyModify" parameterType="Qreply">
+	update qreply set
+		qrwriter = #{qrwriter},
+		qrcontent = #{qrcontent}
+	where qrno = #{qrno}
+		
+</update>
+
+<!-- 댓글 삭제 -->
+<delete id="qreplyDelete" parameterType="Qreply">
+	delete from qreply
+	where qrno = #{qrno}
+</delete>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.NoticeMapper">
+
+
+	<!-- 공지사항 목록(페이징) -->
+	<select id="listPage" resultType="Notice"
+		parameterType="xyz.itwill.util.Criteria">
+		select nno, ntitle, ncontent, ndate from
+		(select nno,
+		ntitle, ncontent, ndate, row_number() over(order by nno desc) as
+		rnum
+		from notice)
+		where rnum between #{rowStart} and #{rowEnd} order by nno
+		desc
+	</select>
+
+
+	<!-- 공지사항 전체 글 갯수 -->
+	<select id="listCount" resultType="int">
+		select count(nno) from notice
+	</select>
+
+
+	<!-- 공지사항 상세 -->
+	<select id="read" parameterType="int" resultType="Notice">
+		select nno,
+		ntitle, ncontent, ndate from notice where nno=#{nno}
+	</select>
+
+
+	<!-- 공지사항 삽입 -->
+	<insert id="insert">
+		insert into notice values(notice_seq.nextval ,
+		#{ntitle}, #{ncontent} ,
+		sysdate )
+	</insert>
+
+
+	<!-- 공지사항 변경 -->
+	<update id="update" parameterType="Notice">
+		update notice set ntitle =
+		#{ntitle}, ncontent = #{ncontent} where nno = #{nno}
+	</update>
+
+
+	<!-- 공지사항 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from notice where nno =
+		#{nno}
+	</delete>
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

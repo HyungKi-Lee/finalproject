@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.ProductMapper">
+	<resultMap type="Product" id="productResultMap">
+			<id column="p_no" property="pNo"/>
+			<result column="p_name" property="pName"/>
+			<result column="p_departure" property="pDeparture"/>
+			<result column="p_course" property="pCourse"/>
+			<result column="p_img" property="pImg"/>
+			<result column="p_url" property="pUrl"/>
+			<association property="productDetail" javaType="ProductDetail" resultMap="productDetailResultMap"/>
+	</resultMap>
+	
+	<resultMap type="ProductDetail" id="productDetailResultMap">
+			<id column="pd_no" property="pdNo"/>
+			<result column="p_course" property="pCourse"/>
+			<result column="pd_grade" property="pdGrade"/>
+			<result column="pd_high" property="pdHigh"/>
+			<result column="pd_low" property="pdLow"/>
+			<result column="pd_seats" property="pdSeats"/>
+	</resultMap>
+	
+	<select id="selectAllProductCal" resultMap="productResultMap">
+		select 
+			p_no, p_departure, p_name ,sum(pd.pd_seats) pd_seats
+		from 
+			product p 
+		join 
+			product_detail pd on p.p_course=pd.p_course
+		group by 
+			p_no, p_name,p_departure order by p_departure
+	</select>
+	
+	<select id="selectProductDetail" resultMap="productResultMap">
+		select 
+			pd_grade, pd_high, sum(pd_seats) pd_seats 
+		from 
+			product p 
+		join 
+			product_detail pd on p.p_course = pd.p_course 
+		where 
+			p.p_name=#{pName} and p.p_departure=#{pDeparture} 
+		group by 
+			pd_grade,pd_high
+	</select>
+	
+	<!-- 예약 최종 확인 페이지에서 상품 금액 검색 -->
+	<select id="selectProductPrice" resultType="int">
+		select 
+			pd_high 
+		from 
+			product_detail pd 
+		join 
+			product p on p.p_course = pd.p_course
+		where 
+			p.p_no = #{pNo} and pd.pd_grade=#{pdGrade}
+	</select>
+	
+	<!-- 페이징 처리를 위한 상품갯수 검색 -->
+	<select id="selectProductCount" resultType="int">
+		select count(*) from product
+		<where>
+			<if test="search!='' and search!=null">
+				 p_departure >=#{search}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectProduct" resultType="Product">
+		select * from product where num=#{num}
+	</select>
+	
+	<!-- 페이징 및 지정한 날짜로 상품 검색 -->
+	<select id="selectProductList" resultType="Product">
+		select * from (select rownum rn, product.* from (select * from product
+		<where>
+			<if test="search!='' and search!=null">
+				 p_departure >=#{search}
+			</if>
+		</where>
+		order by p_departure) product) where rn between #{startRow} and #{endRow}
+	</select>
+
+	
+<!-- ***************************관리자 페이지*************************** -->
+<!-- 상품 정보 검색 -->   
+<select id="selectProductDetails" resultType="Product">
+	select * from product where p_no=#{pNo}
+</select>  
+
+<!-- 상품 삭제 -->
+<delete id="deleteProduct" parameterType="int">
+	delete from product where p_no=#{pNo}
+</delete>
+
+<!-- 전체 상품 갯수 검색 -->   
+<select id="selectTotalProductCount" resultType="int">
+	select count(*) from product
+</select>      
+
+<!-- 전체 상품 목록 검색 -->
+<select id="selectTotalProductList" resultType="Product">
+	select * from product
+</select>  
+ 
+<!-- 상품번호 or 상품명으로 검색 시 상품 갯수 검색(미검색 시 전체 상품 갯수) --> 
+<select id="selectSearchProductCount" resultType="int">
+	select count(*) from product
+	<where>
+		<if test="searchPNo!=null and searchPNo!=''">
+			p_no=#{searchPNo} 
+		</if>
+		<if test="searchPName!=null and searchPName!=''">
+			p_name like '%'||#{searchPName}||'%' 
+		</if>
+	</where>
+	order by p_no
+</select> 
+
+<!-- 상품번호 or 상품명으로 검색 시 전체 상품 목록 검색(미검색 시 전체 상품 목록) -->
+<select id="selectSearchProductList" resultType="Product">
+	select * from (select rownum rn, temp.* from (select * from product 
+	<where>
+		<if test="searchPNo!=null and searchPNo!=''">
+			p_no=#{searchPNo} 
+		</if>
+		<if test="searchPName!=null and searchPName!=''">
+			p_name like '%'||#{searchPName}||'%' 
+		</if>
+	</where>
+	order by p_no) temp) where rn between #{startRow} and #{endRow}
+</select>
+</mapper>

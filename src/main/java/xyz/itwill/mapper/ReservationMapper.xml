@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.ReservationMapper">
+	<resultMap type="Reservation" id="reservationResultMap">
+			<id column="r_no" property="rNo"/>
+			<result column="r_date" property="rDate"/>
+			<result column="name" property="name"/>
+			<result column="r_sex" property="rSex"/>
+			<result column="phone" property="phone"/>
+			<result column="email" property="email"/>
+			<result column="r_request" property="rRequest"/>
+			<result column="r_path" property="rPath"/>
+			<result column="p_name" property="pName"/>
+			<result column="pd_grade" property="pdGrade"/>
+			<result column="pd_high" property="pdHigh"/>
+			<result column="r_state" property="rState"/>
+			<result column="p_departure" property="pDeparture"/>
+			<result column="id" property="id"/>		
+	</resultMap>
+	
+	<insert id="insertReservation">
+		insert into reservation values(RESERVATION_SEQ.NEXTVAL, sysdate, #{name},#{rSex},#{phone},#{email},#{rRequest},#{rPath},#{pName},#{pdGrade},#{pdHigh},1,#{pDeparture},#{id})
+	</insert>
+
+
+	<!-- 예약 상세 내역 검색 -->
+	<select id="selectRsvnDetail" parameterType="int" resultType="Reservation">
+	      select * from reservation where r_no=#{rNo}
+	</select>
+	
+	<!-- 예약 취소(상태 0으로 변경) -->
+	<update id="updateRsvnCancel">
+		update reservation set r_state=0 where r_no=#{rNo}
+	</update>
+
+
+
+<!-- ***************************마이페이지*************************** -->
+<!-- 아이디로 해당 아이디의 예약내역 검색(취소건 미포함) -->
+<select id="selectRsvnListById" resultType="Reservation">
+      select * from reservation where id=#{id} and r_state!=0 order by r_no desc
+</select>
+
+
+<!-- 나의 예약 수 검색(취소건 포함) -->
+<select id="selectMyRsvnCount" resultType="int">
+      select count(*) from reservation where id=#{id} order by r_no desc
+</select>   
+
+
+<!-- 나의 예약 목록 검색(취소건 포함) -->
+<select id="selectMyRsvnList" resultType="Reservation">
+      select * from (select rownum rn, temp.* from (select * from reservation where id=#{id} order by r_no desc) temp)
+      where rn between #{start} and #{end}
+</select> 
+
+<!-- ***************************관리자 페이지*************************** -->
+<!-- 오늘 들어온 예약수 검색 -->   
+<select id="selectTodayRsvnCount" resultType="int">
+	<![CDATA[
+	      select count(*) from reservation where r_date>=to_char(sysdate,'YY/MM/DD') and r_state!=0
+	]]>
+</select>      
+
+<!-- 오늘 들어온 예약 목록 검색 -->
+<select id="selectTodayRsvnList" resultType="Reservation">
+	<![CDATA[
+	      select * from reservation where r_date>=to_char(sysdate,'YY/MM/DD') and r_state!=0 order by r_no desc
+	]]>
+</select>   
+
+
+
+<!-- 검색기능 X -->
+<!-- 전체 예약 수 검색 -->
+<select id="selectRsvnCount" resultType="int">
+      select count(*) from reservation
+</select>   
+
+
+<!-- 전체 예약 목록 검색 -->
+<select id="selectRsvnList" resultType="Reservation">
+      select * from (select rownum rn, temp.* from (select * from reservation order by r_no desc) temp)
+      where rn between #{start} and #{end}
+</select> 
+
+
+<!-- 검색기능 -->
+<!-- 검색한 예약 갯수 검색(미검색 시 전체 예약 갯수) --> 
+<select id="selectSearchRsvnCount" parameterType="map" resultType="int">
+	select count(*) from reservation
+	<where>
+		<if test="searchRNo!=null and searchRNo!=''">
+			r_no=#{searchRNo} 
+		</if>
+		<if test="searchName!=null and searchName!=''">
+			name like '%'||#{searchName}||'%' 
+		</if>
+	</where>
+	order by r_no
+</select> 
+
+<!-- 검색한 예약 목록 검색(미검색 시 전체 예약 목록) -->
+<select id="selectSearchRsvnList" parameterType="map" resultType="Reservation">
+	select * from (select rownum rn, temp.* from (select * from reservation 
+	<where>
+		<if test="searchRNo!=null and searchRNo!=''">
+			r_no=#{searchRNo} 
+		</if>
+		<if test="searchName!=null and searchName!=''">
+			name like '%'||#{searchName}||'%' 
+		</if> 
+	</where>
+	order by r_no desc) temp) where rn between #{startRow} and #{endRow}
+</select>
+
+
+</mapper>

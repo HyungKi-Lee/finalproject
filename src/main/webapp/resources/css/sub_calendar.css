@@ -1,0 +1,49 @@
+@import url(../../fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+#hCalendar {width: 100%;max-width: 1290px; margin: 0 auto; margin-top: 50px; margin-bottom: 10px;}
+
+#hCalendar #header {height: 50px; line-height: 50px; text-align: center; font-size: 18px; font-weight: bold}
+#hCalendar .button {color: #000; text-decoration: none;}
+
+#hCalendar table { width: 100%; max-width: 1290px;margin:0 auto; margin-top:30px;}
+#hCalendar caption {display: none;}
+#hCalendar table td{height:75px;padding-top:5px !important; vertical-align: baseline; border-bottom:1px solid #7e7e7e;}
+#hCalendar table td:hover { background: #eee;}
+
+#hCalendar .sun {text-align: center; color: #ff3d10;}
+#hCalendar .mon {text-align: center;}
+#hCalendar .tue {text-align: center;}
+#hCalendar .wed {text-align: center;}
+#hCalendar .thu {text-align: center;}
+#hCalendar .fri {text-align: center;}
+#hCalendar .sat {text-align: center; color: #0f58de;}
+div#calendar_header { text-align: center;}
+span#date { font-weight: bold;font-size: 1.2em; margin: 0 30px;}
+a.button.left, a.button.right { background: #cfa47f; padding: 3px 6px; color: #2a303b;}
+th.row_week{font-size:1.26em;color:#90703c !important; padding: 5px 0;}
+.bg_blue{ background-color:#2a303b; }
+.journey_info{width: 100%; max-width: 1290px;margin:0 auto;}
+.info_title{color:#2a303b;background:#cfa47f;font-size: 1.2em;padding: 2px 8px;}
+.date-type-1 { background-color: #2a303b; color: #fff;}
+.date-type-2 { background-color: #7e7e7e; color: #fff;}
+.date-type-3 { background-color: #7e96b1; color: #fff;}
+.date-type-4 { background-color: #7f92b7; color: #fff;}
+
+.date-type-5 { background-color: #d2a577; color: #fff;}
+.date-type-6 { background-color: #c78f8f; color: #fff;}
+.date-type-7 { background-color: #83a282; color: #fff;}
+.date-type-8 { background-color: #adac89; color: #fff;}
+
+#hCalendar table td:hover .date-type-1,
+#hCalendar table td:hover .date-type-2,
+#hCalendar table td:hover .date-type-3,
+#hCalendar table td:hover .date-type-4,
+#hCalendar table td:hover .date-type-5,
+#hCalendar table td:hover .date-type-6,
+#hCalendar table td:hover .date-type-7,
+#hCalendar table td:hover .date-type-8 { display: none; }
+.btn_reservation img{ margin: 0 auto;}
+#hCalendar table td:hover .btn_reservation{
+display:block !important;
+}
+.btn_reservation{ display:none;}

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.QnaMapper">
+
+	<!-- QnA 목록(페이징) -->
+	<select id="qlistPage" resultType="Qna"
+		parameterType="xyz.itwill.util.Criteria">
+		select qno, qwriter, qtitle, qcontent, qcount, qdate from
+		(select qno,
+		qwriter, qtitle, qcontent, qcount,  qdate, row_number() over(order
+		by qno desc) as
+		rnum
+		from qna)
+		where rnum between #{rowStart} and
+		#{rowEnd} order by qno
+		desc
+	</select>
+
+	<!-- QnA 전체 갯수 -->
+	<select id="qlistCount" resultType="int">
+		select count(qno) from qna
+	</select>
+	
+	
+	<!-- QnA 조회수 증가 -->
+	<update id="qHit" parameterType="int">
+    	update qna set
+    	qcount = qcount+1
+    	where qno = #{qno}
+    </update>
+
+
+	<!-- QnA 상세 -->
+	<select id="qread" parameterType="int" resultType="Qna">
+		select qno,id,
+		qwriter, qtitle, qcontent from qna where qno=#{qno}
+	</select>
+
+	<!-- QnA 등록 -->
+	<insert id="qinsert">
+		insert into qna( qno, id, qtitle, qcontent, qwriter, qdate)
+		values( qna_seq.nextval, #{id}, #{qtitle}, #{qcontent}, #{qwriter}, sysdate)
+	</insert>
+
+
+	<!-- QnA 변경 -->
+	<update id="qupdate" parameterType="Qna">
+		update qna set qtitle =
+		#{qtitle}, qcontent = #{qcontent} where qno = #{qno}
+	</update>
+
+	<!-- QnA 삭제 -->
+	<delete id="qdelete" parameterType="int">
+		delete from qna where qno =
+		#{qno}
+	</delete>
+
+
+	<!-- ***************************마이페이지*************************** -->
+	<select id="selectQnaListById" resultType="Qna">
+	      select * from qna where id=#{id}
+	</select>
+	
+	<!-- 나의 문의 수 검색 -->
+	<select id="selectMyQnaCount" resultType="int">
+	      select count(*) from qna where id=#{id}
+	</select>   
+	
+	
+	<!-- 나의 문의 목록 검색 -->
+	<select id="selectMyQnaList" resultType="Qna">
+	      select * from (select rownum rn, temp.* from (select * from qna where id=#{id} order by qno desc) temp)
+	      where rn between #{start} and #{end}
+	</select> 
+
+
+<!-- ***************************관리자 페이지*************************** -->
+	<!-- 오늘 들어온 문의글 수 검색 -->   
+	<select id="selectTodayQnaCount" resultType="int">
+		<![CDATA[
+	      select count(*) from qna where qdate>=to_char(sysdate,'YY/MM/DD')
+		]]>
+	</select>      
+	
+	<!-- 오늘 들어온 문의글 목록 검색 -->
+	<select id="selectTodayQnaList" resultType="Qna">
+		<![CDATA[
+	      select * from qna where qdate>=to_char(sysdate,'YY/MM/DD') order by qno desc
+		]]>
+	</select>
+
+	<!-- 검색기능 -->
+	<!-- 검색한 문의 갯수 검색(미검색 시 전체 문의 갯수) --> 
+	<select id="selectSearchQnaCount" parameterType="map" resultType="int">
+		select count(*) from qna
+		<where>
+			<if test="searchQNo!=null and searchQNo!=''">
+				qno=#{searchQNo} 
+			</if>
+			<if test="searchQTitle!=null and searchQTitle!=''">
+				qtitle like '%'||#{searchQTitle}||'%' 
+			</if>
+		</where>
+		order by qno
+	</select> 
+
+	<!-- 검색한 문의 목록 검색(미검색 시 전체 문의 목록) -->
+	<select id="selectSearchQnaList" parameterType="map" resultType="Qna">
+		select * from (select rownum rn, temp.* from (select * from qna 
+		<where>
+			<if test="searchQNo!=null and searchQNo!=''">
+				qno=#{searchQNo} 
+			</if>
+			<if test="searchQTitle!=null and searchQTitle!=''">
+				qtitle like '%'||#{searchQTitle}||'%'
+			</if> 
+		</where>
+		order by qno desc) temp) where rn between #{startRow} and #{endRow}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

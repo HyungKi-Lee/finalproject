@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+#wrapper {
+	max-width: 492px;
+	min-width: 360px;
+	margin: 0 auto;
+	padding: 0 16px 200px;
+}
+
+.header {
+    text-align: center;
+}
+
+.header h1 {
+    border-bottom: 2px solid #17191d;
+    padding-bottom: 5px;
+	font-size: 25px;
+	width: 200px;
+	margin: 10px auto;
+}
+
+.id, .passwd {
+	margin: 25px 10px;
+}
+
+input {
+	height: 50px;
+	width: 100%;
+	border: 1px solid #e5e8eb;
+	padding-left: 15px;
+}
+
+.logBtn {
+	margin: 0 4px 0 10px;
+}
+
+.logBtn button {
+	width: 100%;
+	height: 50px;
+	background-color: #17191d;
+	color: #fff;
+	font-size: 18px;
+	cursor: pointer;
+	border: none;
+	/*변형 완료 1초*/
+	transition-duration: 0.2s;
+	/*빠른 시작 서서히 감속*/
+	transition-timing-function: linear ;
+	margin-bottom: 10px;
+}
+
+.logBtn button:hover {
+	background: #B4986B;
+	transition: all 0.2s linear;
+}
+
+.menu {
+	margin-left: 25px;
+}
+
+.menu a {
+	text-decoration: none;
+	margin-right: 10px;
+	font-size: 15px;
+}

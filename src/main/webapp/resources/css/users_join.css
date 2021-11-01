@@ -1,0 +1,64 @@
+@charset "UTF-8";
+#wrapper {
+	max-width: 492px;
+	min-width: 360px;
+	margin: 0 auto;
+	padding: 0 16px 200px;
+}
+
+.header {
+    text-align: center;
+}
+
+.header h1 {
+    border-bottom: 2px solid #17191d;
+	font-size: 25px;
+	width: 200px;
+	margin: 10px auto;
+}
+
+.id .passwd .passwdCheck .birth .phone .address{
+	margin: 25px 10px;
+	justify-content: space-between;
+	width: 300px;
+}
+div .name, .emial, .phone {
+    margin: 15px 0 auto;	
+}
+/* 
+div .email {
+    margin: 15px 0 auto;
+	
+}
+div .phone {
+    margin: 15px 0 auto;	
+} */
+.error {
+	color: red;
+	font-size: 15px;
+}
+input {
+	height: 50px;
+	width: 100%;
+	border: 1px solid #e5e8eb;
+}
+.submit {
+    margin: 20px;
+}
+
+input[type="text"], [type="password"]{
+    padding-left: 15px;
+}
+  
+.submit button {
+	height: 30px;
+	background-color: #17191d;
+	color: #fff;
+	font-size: 15px;	
+	border-radius: 10px;
+}
+
+.submit button:hover {
+	background-color: #0077ff;
+	transition: all 0.2s linear;
+}
